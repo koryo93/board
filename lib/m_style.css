@@ -1,0 +1,40 @@
+BODY,TABLE,TR,TD,td,SELECT,input,DIV,form,TEXTAREA,center,option,pre,blockquote
+{
+    font-size:10pt;
+    font-family:돋음,굴림,sans-serif,Arial;
+    color:#575656;
+    line-height:120%
+}
+
+/* 링크 처음 상태 */
+A:link
+{
+   font-family:돋음,굴림, sans-serif,Arial;
+   font-size:9pt;
+   color:#056F9B;
+   text-decoration:none;
+}
+/* 방문한 적이 있는 상태 */
+A:visited
+{
+    font-family:돋음,굴림,sans-serif,Arial;
+    font-size:9pt;
+    color:#056F9B;
+    text-decoration:none;
+}
+/*클릭되는 순간*/
+A:active
+{
+    font-family:돋음,굴림,sans-serif,Arial;
+    font-size:9pt;
+    color:#575656;
+    text-decoration:none;
+}
+/*마우스 올리면*/
+A:hover
+{
+    font-family:돋음,굴림,sans-serif,Arial;
+    font-size:9pt;
+    color:#575656;
+    text-decoration:none;
+}
