@@ -3,16 +3,17 @@ header("content-type:text/html; charset=UTF-8");
 
 include('../../lib/db_connect.php');
 $connect = dbconn(); //DB컨넥트
-$member = member(); //회원정보
+$member = member($connect); //회원정보
 
 if( !$member["user_id"])
     Error('로그인 후 이용해 주세요.');
-$no = $_GET["no"];
 
+$no = $_GET["no"];
 $user_id = $member["user_id"];
 $query ="SELECT * FROM bbs1 WHERE no='$no' AND user_id='$user_id' ";
 $result = mysqli_query($connect, $query);
 $data = mysqli_fetch_array($result);
+
 if( !$result )
     die("연결에 실패 하였습니다.".mysqli_error());
 
