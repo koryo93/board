@@ -35,3 +35,49 @@ function Error($msg)
     ";
     exit;   // 위에 에러 메시지만 띄운다.
 }
+
+function aprintf($array)
+{
+    echo("<pre>");
+    print_r($array);
+    echo("</pre>");
+
+}
+
+function popupmsg($msg)
+{
+    print<<<HTML
+<script>
+    alert('{$msg}');
+</script>
+HTML;
+
+}
+
+function popupmsg_exit($msg)
+{
+    print<<<HTML
+<script>
+    alert('{$msg}');
+</script>
+HTML;
+    exit;
+}
+
+function member($link)
+{
+    if( isset($_COOKIE["COOKIES"]) ) {
+        $temps = $_COOKIE["COOKIES"];
+        $cookise = explode("//", $temps);
+
+        // 회원정보
+        $query = "SELECT * FROM member WHERE user_id='$cookise[0]'";
+        $result = mysqli_query($link, $query);
+        $member = mysqli_fetch_array($result);
+
+        return $member;
+    }
+
+    return;
+}
+
