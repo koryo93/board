@@ -10,7 +10,9 @@ $memo = $_POST["memo"]; //코멘트 내용
 
 include ('../../lib/db_connect.php');
 $connect = dbconn(); //DB컨넥트
-$member = member(); //회원정보
+$member = member($connect); //회원정보
+
+//aprintf($_POST);
 
 if( !$member["user_id"] )
     Error('로그인 후 이용하세요.');
@@ -26,9 +28,13 @@ $name = $member["name"];
 $nick_name = $member["nick_name"];
 
 $query = "INSERT INTO 
-            bbs1_comment(id, bbs1_no, user_id, name, nick_name, memo, replys, regdate)
+            bbs1_comment (id, bbs1_no, user_id, name, nick_name, memo, replys, regdate)
           VALUES 
-            ('$id', '$bbs1_no', $user_id', '$name', '$nick_name', '$memo', '$replys', '$regdate')";
+            ('$id', '$bbs1_no', '$user_id', '$name', '$nick_name', '$memo', '$replys', '$regdate')";
+
+//aprintf($query);
+//aprintf($connect);
+
 mysqli_query($connect, $query);
 
 $query="UPDATE bbs1 SET comment=comment+1 WHERE no='$bbs1_no'";
