@@ -13,7 +13,7 @@ $reply_rr = $_GET["reply_rr"]; //코멘트의 답글 삭제
 
 include('../../lib/db_connect.php');
 $connect = dbconn(); //DB컨넥트
-$member = member(); //회원정보
+$member = member($connect); //회원정보
 
 $user_id = $member["user_id"];
 $query = "SELECT * FROM bbs1_comment WHERE user_id='$user_id' AND no='$d_no'";
@@ -29,7 +29,6 @@ $q_count = "SELECT count(*) FROM bbs1_comment WHERE bbs1_no='$bbs1_no' and reply
 $r_count = mysqli_query($connect, $q_count);
 $count = mysqli_fetch_array($r_count);
 $total_comment = $count[0] + 1;
-
 
 if($replys_all=='all')
 {  //코멘트와 답글 삭제 하기
@@ -52,8 +51,6 @@ if($reply_rr=='rr')
     $result = mysqli_query($connect, $query);
 }
 ?>
-
-
 
 <script>
     window.alert("댓글이 삭제 되었습니다.");
