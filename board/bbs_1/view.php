@@ -1,4 +1,6 @@
-<?php ob_start(); ?>
+<?php
+    ob_start();
+?>
 <html> 
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
@@ -7,9 +9,9 @@
 <?php
 include ("../../lib/db_connect.php");
 $connect = dbconn();
-$member = member();
+$member = member($connect);
 
-if( !$member["user_id"])
+if( !$member["user_id"] )
     Error("로그인 후 이용해 주세요.");
 
 $no = $_GET["no"];
@@ -18,7 +20,6 @@ $id = $_GET["id"];
 $re_wt = $_GET["re_wt"];  //코멘트 답글입력란 생성  값이 (Y)면 .....
 $lo_reply_1 = $_GET["lo_reply_1"]; //페이지 로케이션
 $d_no = $_GET["d_no"]; //코멘트 순번.
-
 
 $bbs1 = $no;
 
@@ -68,12 +69,7 @@ $data = mysqli_fetch_array($result);
         <td width='100%' height='300' align='left' valign='top' bgcolor='FFFFFF'>
             <hr size='0.1' width='98%' color='94A0FC' />
             <div align='center'>
-            <?php
-                if( $data["file01"] )
-                {?>
-                    <img src='./data/<?=$data["file01"]?>'>
-                <?php
-                }?>
+            <?php if( $data["file01"] ) {?> <img src='./data/<?=$data["file01"]?>'> <?php }?>
             </div>
             <br>
             <?=$data["story"]?>
@@ -108,6 +104,7 @@ $data = mysqli_fetch_array($result);
 
     <tr>
         <td width='854' align='center'>
+
         <!-------코맨트 출력---------->
         <table border='0'  width='800' cellspacing='0' cellpadding='0' id='lo_reply_1'>
         <?php
@@ -127,56 +124,56 @@ $data = mysqli_fetch_array($result);
             while( $d = mysqli_fetch_array( $r ) ){
         ?>
 
-        <tr>
-            <td width='50' align='center' valign='middle' rowspan='3' bgcolor='#E3E0E0'>
-                <img src='./img/pv_x.gif' width='50' height='50'>
-            </td>
+            <tr>
+                <td width='50' align='center' valign='middle' rowspan='3' bgcolor='#E3E0E0'>
+                    <img src='./img/pv_x.gif' width='50' height='50'>
+                </td>
 
-            <td width='10' valign='middle' rowspan='3' bgcolor='#E3E0E0'>&nbsp;</td>
-        </tr>
+                <td width='10' valign='middle' rowspan='3' bgcolor='#E3E0E0'>&nbsp;</td>
+            </tr>
 
-        <tr>
-            <td width='674'  valign='middle' bgcolor='#E3E0E0'>
+            <tr>
+                <td width='674' valign='middle' bgcolor='#E3E0E0'>
                 <span style='font-size:9pt; font-family:Tahoma; color:#727371'>
                 <?php
-                if( $d["nick_name"]){
+                if ($d["nick_name"]) {
                     echo $d["nick_name"];
-                }
-                else
-                {
+                } else {
                     echo $d["name"];
-                }?>
-            &nbsp;
-                <?php
-                    echo $d_Y= substr($d["regdate"],0,4)."-";
-                    echo $d_m= substr($d["regdate"],4,2)."-";
-                    echo $d_d= substr($d["regdate"],6,2)."&nbsp;";
-                    echo $d_h= substr($d["regdate"],8,2).":";
-                    echo $d_i= substr($d["regdate"],10,2);
-                ?>
+                } ?>
+                    &nbsp;
+                    <?php
+                    echo $d_Y = substr($d["regdate"], 0, 4) . "-";
+                    echo $d_m = substr($d["regdate"], 4, 2) . "-";
+                    echo $d_d = substr($d["regdate"], 6, 2) . "&nbsp;";
+                    echo $d_h = substr($d["regdate"], 8, 2) . ":";
+                    echo $d_i = substr($d["regdate"], 10, 2);
+                    ?>
                 </span>
-            </td>
+                </td>
 
-            <td width='120' align='right' valign='middle' bgcolor='#E3E0E0'>
-                <?php
-                if( $member["user_id"] )
-                {?>
-                    <a href='view.php?id=<?=$id?>&re_wt=Y&no=<?=$data["no"]?>&d_no=<?=$d["no"]?>&#lo_reply_2' onfocus="this.blur()">
-                    <span style='font-size:9pt; font-family:Tahoma; color:#727371'>[답글달기]</span></a> &nbsp;
-                <?php
-                }?>
-            </td>
-        </tr>
+                <td width='120' align='right' valign='middle' bgcolor='#E3E0E0'>
+                    <?php
+                    if ($member["user_id"]) {
+                        ?>
+                        <a href='view.php?id=<?= $id ?>&re_wt=Y&no=<?= $data["no"] ?>&d_no=<?= $d["no"] ?>&#lo_reply_2'
+                           onfocus="this.blur()">
+                            <span style='font-size:9pt; font-family:Tahoma; color:#727371'>[답글달기]</span></a> &nbsp;
+                        <?php
+                    } ?>
+                </td>
+            </tr>
 
-        <tr>
-            <td colspan='4' valign='top'bgcolor='#E3E0E0'>
-		        <?php echo "<font color='#073C62'>".nl2br($d["memo"])."</font>";?>
-		        <div align='right'>
-		            <a href='./comment_del.php?d_no=<?=$d["no"]?>&no_s=<?=$data["no"]?>&bbs1_no=<?=$d["bbs1_no"]?>&replys_all=all' onfocus='this.blur()'>
-		            <font color='#FF0000' onclick="return confirm('정말로 삭제 하시겠습니까?')">[DEL]</font></a>
-		        </div>
-		    </td>
-        </tr>
+            <tr>
+                <td colspan='4' valign='top' bgcolor='#E3E0E0'>
+                    <?php echo "<font color='#073C62'>" . nl2br($d["memo"]) . "</font>"; ?>
+                    <div align='right'>
+                        <a href='./comment_del.php?d_no=<?= $d["no"] ?>&no_s=<?= $data["no"] ?>&bbs1_no=<?= $d["bbs1_no"] ?>&replys_all=all'
+                           onfocus='this.blur()'>
+                            <font color='#FF0000' onclick="return confirm('정말로 삭제 하시겠습니까?')">[DEL]</font></a>
+                    </div>
+                </td>
+            </tr>
 
         <?php
         ////////////// 코맨트 (답글-출력)/////////////
@@ -184,73 +181,74 @@ $data = mysqli_fetch_array($result);
         $dddd = $d["no"];
         $q_2 = "SELECT * FROM bbs1_comment WHERE bbs1_no='$no' AND replys='$dddd' ORDER BY regdate ASC";
         $r_2 = mysqli_query($connect, $q_2);
-        while( $d_2=mysqli_fetch_array( $r_2 ) ){
+        while ($d_2 = mysqli_fetch_array($r_2))
+        {
         ?>
         <tr>
-            <td  width='100%' height='5' valign='top' colspan='4'  >
+        <td width='100%' height='5' valign='top' colspan='4'>
             <table border='0' width='100%' height='5' valign='middle'>
-            <tr>
-                <td width='10'>&nbsp;</td>
-                <td width='10' align='center'> <span style='font-size:11pt; color:#8A8A88'>└</span> </td>
+                <tr>
+                    <td width='10'>&nbsp;</td>
+                    <td width='10' align='center'><span style='font-size:11pt; color:#8A8A88'>└</span></td>
 
-                <td width='30' align='center'> <img src="./img/pv_x.gif" width='30' height='30'> </td>
+                    <td width='30' align='center'><img src="./img/pv_x.gif" width='30' height='30'></td>
 
-                <td width='75%' align='left'>
+                    <td width='75%' align='left'>
                 <span style='font-size:9pt; color:#8A8A88'>
                 <?php
-                if( $d_2["nick_name"])
-                {
+                if ($d_2["nick_name"]) {
                     echo $d_2["nick_name"];
-                }
-                else
-                {
+                } else {
                     echo $d_2["name"];
                 }
                 ?>
-&nbsp; &nbsp; &nbsp; &nbsp;
-                <?
-                    echo $d_2_Y= substr($d_2["regdate"],0,4)."-";
-                    echo $d_2_m= substr($d_2["regdate"],4,2)."-";
-                    echo $d_2_d= substr($d_2["regdate"],6,2)."&nbsp;";
-                    echo $d_2_h= substr($d_2["regdate"],8,2).":";
-                    echo $d_2_i= substr($d_2["regdate"],10,2);
-                ?>
-                 <br>
-                <?=$d_2["memo"]?></span>
-                &nbsp;
-		        <div align='right'>
-                    <a href="comment_del.php?d_no=<?=$d_2["no"]?>&no_s=<?=$data["no"]?>&bbs1_no=<?=$d_2["bbs1_no"]?>&replys=<?=$d_2["replys"]?>&reply_rr=rr" onfocus="this.blur()" >
-                    <span style='font-size:8pt; color:#5A5B5A' onclick="return confirm('정말로 삭제 하시겠습니까?')">[del]</span></a> &nbsp;
-		        </div>
-	
-                </td>
-            </tr>
+                    &nbsp; &nbsp; &nbsp; &nbsp;
+                    <?php
+                    echo $d_2_Y = substr($d_2["regdate"], 0, 4) . "-";
+                    echo $d_2_m = substr($d_2["regdate"], 4, 2) . "-";
+                    echo $d_2_d = substr($d_2["regdate"], 6, 2) . "&nbsp;";
+                    echo $d_2_h = substr($d_2["regdate"], 8, 2) . ":";
+                    echo $d_2_i = substr($d_2["regdate"], 10, 2);
+                    ?>
+                    <br>
+                    <?= $d_2["memo"] ?></span>
+                        &nbsp;
+                        <div align='right'>
+                            <a href="comment_del.php?d_no=<?= $d_2["no"] ?>&no_s=<?= $data["no"] ?>&bbs1_no=<?= $d_2["bbs1_no"] ?>&replys=<?= $d_2["replys"] ?>&reply_rr=rr"
+                               onfocus="this.blur()">
+                                <span style='font-size:8pt; color:#5A5B5A' onclick="return confirm('정말로 삭제 하시겠습니까?')">[del]</span></a>
+                            &nbsp;
+                        </div>
+
+                    </td>
+                </tr>
             </table>
-            </td>
-<?php
-}
-//////////////  코맨트 (답글-출력) [끝]///////////// ?>
+        </td>
+        <?php
+        }
+        //////////////  코맨트 (답글-출력) [끝]/////////////
+        ?>
 
+        <?php /// 코맨트 (답글-입력) ///
+        if ($re_wt == 'Y' and $d_no == $d[no])
+        {
+        ?>
+        <form name='replys' action='comment_write.php' method='post'>
+            <input type=hidden name='id' value='<?= $data["id"] ?>'>
+            <input type=hidden name='bbs1_no' value='<?= $data["no"] ?>'>
+            <input type=hidden name='replys' value='<?= $d["no"] ?>'>
 
-
-<? /// 코맨트 (답글-입력) ///
-    if( $re_wt == 'Y' and $d_no == $d[no] )
-    {
-?>
-        <form name='replys'  action='comment_write.php' method='post'>
-            <input type=hidden name='id' value='<?=$data["id"]?>'>
-            <input type=hidden name='bbs1_no' value='<?=$data["no"]?>' >
-            <input type=hidden name='replys' value='<?=$d["no"]?>'>
-
-        <tr>
-            <td id='lo_reply_2' colspan='2' align='right'> <span style='font-size:11pt; color:#8A8A88'>└</span> </td>
-            <td  align='center' valign='middle'> <textarea name='memo' style="width:90%; height:30px;"></textarea> </td>
-            <td align='center' valign='middle'> <input type=submit value='submit' style="width:80px; height:20px;" /> </td>
-        </form>
-        </tr>
-<?php
-	}  
-} /// 코맨트 (답글-입력) [끝] ///?>
+            <tr>
+                <td id='lo_reply_2' colspan='2' align='right'><span style='font-size:11pt; color:#8A8A88'>└</span></td>
+                <td align='center' valign='middle'><textarea name='memo' style="width:90%; height:30px;"></textarea>
+                </td>
+                <td align='center' valign='middle'><input type=submit value='submit' style="width:80px; height:20px;"/>
+                </td>
+                </form>
+            </tr>
+        <?php
+        }
+        }?>
 
 
         <tr>
@@ -271,19 +269,16 @@ if( $member["user_id"])
 	 
 	    <tr>
             <form name='replys'  action='comment_write.php' method='post'>
-                <input type=hidden name='bbs1_no' value='<?=$data[no]?>' title='게시판글 번호'>
+                <input type=hidden name='bbs1_no' value='<?=$data["no"]?>' title='게시판글 번호'>
                 <input type=hidden name='replys' value='0'>
-                <input type=hidden name='id' value='<?=$data[id]?>'>
+                <input type=hidden name='id' value='<?=$data["id"]?>'>
 
             <td width=120 align='center' valign='middle' bgcolor='#E7CADE'>
                 <?php
                 if( $member["nick_name"])
-                {
-                     echo $member["nick_name"];
-                }else
-                {
+                    echo $member["nick_name"];
+                else
                     echo $member["name"];
-                }
                 ?>
             </td>
 
@@ -298,10 +293,10 @@ if( $member["user_id"])
 	   
 	   
 	        <td width=30><input type=submit value='O K'></td>
-	   </tr>
-	   </form>
+            </form>
+	    </tr>
         </table>
-	<?} //회원아이디가 있으면 여기까지?>
+	<?php } //회원아이디가 있으면 여기까지?>
  <!---//////////코맨트 (입력) [끝] //////////--->
 
     </td>
