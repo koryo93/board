@@ -2,11 +2,11 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <link type="text/css" href="../../lib/m_style.css" rel='stylesheet' />
-<title>TEST 게시판 글수정</title>
-<?
+<title>게시판 글수정</title>
+<?php
 include ("../../lib/db_connect.php");
 $connect = dbconn();
-$member = member();
+$member = member($connect);
 
 if( !$member["user_id"] )
     Error("로그인 후 이용해 주세요.");
@@ -26,11 +26,31 @@ if( !$member["user_id"] )
     width:70pt; height:20pt;
 }
 </style>
+<script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+    //<![CDATA[
+    function LoadPage()
+    {
+        CKEDITOR.replace('ir1');
+    }
+    function FormSubmit(f)
+    {
+        CKEDITOR.instances.ir1.updateElement();
+        if(f.ir1.value == "")
+        {
+            alert("내용을 입력해 주세요.");
+            return false;
+        }
+        alert(f.ir1.value);
 
-<script type="text/javascript" src="../../SmartEditor2/js/HuskyEZCreator.js" charset="utf-8"></script>
+        // 전송은 하지 않습니다.
+        return false;
+    }
+    //]]>
+</script>
 </head>
 
-<body>
+<body onLoad="LoadPage();">
 
 <TABLE BORDER='0' CELLSPACING='0' CELLPADDING='0' WIDTH='100%' HEIGHT='100%' ALIGN='CENTER' VALIGN='TOP'>
 <TR>
@@ -47,14 +67,15 @@ if( !$member["user_id"] )
 $no = $_GET["no"];
 $id = $_GET["id"];
 
-$query = "SELECT * FROM bbs1 WHERE no='$no' and id='$id' ";
+$query = "SELECT * FROM bbs1 WHERE no='$no' AND id='$id'";
+
 $result = mysqli_query($connect, $query);
 $data = mysqli_fetch_array($result);
 ?>
     <tr>
     <form name='edit' action='edit_post.php' method='post' enctype='multipart/form-data'>
-        <input type='hidden' name='id' value='<?=$data[id]?>'>
-        <input type='hidden' name='no' value='<?=$data[no]?>'>
+        <input type='hidden' name='id' value='<?=$data["id"]?>'>
+        <input type='hidden' name='no' value='<?=$data["no"]?>'>
         <td width='100%' height='15' colspan='2' align='left' valign='middle'>
             <li> 이 름:<?=$data["name"]?> (<?=$data["user_id"]?>)  &nbsp;
             <?php
@@ -69,38 +90,14 @@ $data = mysqli_fetch_array($result);
 
     <tr>
         <td width='100%' height='25' colspan='2' align='left' valign='middle'>
-            <li>글 제 목 <input type='text' name='subject' value="<?=$data[subject]?>" style="width:60%; height:25px;">
+            <li>글 제 목 <input type='text' name='subject' value="<?=$data["subject"]?>" style="width:60%; height:25px;">
         </td>
     </tr>
 
     <tr>
         <td width='100%' height='300' colspan='2' align='center' valign='middle' bgcolor='FFFFFF'>
-            <textarea id='ir1'  name='story' style="width:95%; height:300px;"><?=nl2br($data[story])?></textarea>
+            <textarea id='ir1'  name='story' style="width:95%; height:300px;"><?=nl2br($data["story"])?></textarea>
         </td>
-
-
-<script type="text/javascript">
-var oEditors = [];
-nhn.husky.EZCreator.createInIFrame({
-	oAppRef: oEditors,
-	elPlaceHolder: "ir1",
-	sSkinURI: "../../SmartEditor2/SmartEditor2Skin.html",	
-	fCreator: "createSEditor2"
-});
-
-function submitContents( elClickedObj )
-{
-	oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
-	
-	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
-	
-	try
-    {
-		elClickedObj.form.submit();
-	} catch(e) {}
-}
-
-</script>
 
     <tr>
         <td width='100' height='10' colspan='2' bgcolor='FFFFFF'>&nbsp;</td>
@@ -110,10 +107,10 @@ function submitContents( elClickedObj )
         <td width='100%' height='30' colspan='2' align='left' valign='middle' bgcolor='FFFFFF'>
         <?php
             if( $data["file01"])
-            {
-        ?>
+                {
+                ?>
             <li>파일: <?php echo "<font color='3F6FF8'>". $data["file01"]."</font>";
-        ?>
+                ?>
         &nbsp;
             <a href='#' onclick="window.open('./file_del.php?no=<?=$no?>','open','width=450,height=150,top=50,left=5,scrollbars=no, resizable=no')">
             <font color='FF0000'>[삭제]</font></a>
