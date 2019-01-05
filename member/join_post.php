@@ -31,6 +31,6 @@ mysqli_close($connect); //mysql끝내기
 ?>
 
 <script>
-window. alert('회원가입이 완료 되었습니다.');
-location.href='../index.php';
+    window. alert('회원가입이 완료 되었습니다.');
+    location.href='../index.php';
 </script>
