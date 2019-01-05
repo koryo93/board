@@ -33,13 +33,12 @@
 <?php
     /**
         $totals: 총게시물
-        $view_totawl: 한페이지 나타날 게시글수
+        $view_total: 한페이지 나타날 게시글수
      */
-    $rr=ceil($totals/$view_total);
-
+    $rr = ceil($totals / $view_total);
 
     //이전 페이지 구하기
-    $before = $_page-1; //현재 페이지수 에서 -1을 준다.
+    $before = $_page - 1; //현재 페이지수 에서 -1을 준다.
     if( $before < 1 )( $before = 1 );
 
     //다음 페이지 구하기
@@ -62,8 +61,9 @@
     //이전페이지 그룹 출력
     $before_group = $goto -1;
     if( $before_group < 1 )( $before_group = 1 );
+    $php_self = $_SERVER["PHP_SELF"];
     if( $_page != 1 )
-        echo ("<a href=$PHP_SELF?_page=$before_group$href>[◀]</a>&nbsp;"); //이전 페이지 그룹출력
+        echo ("<a href=$php_self?_page=$before_group$href>[◀]</a>&nbsp;"); //이전 페이지 그룹출력
  
 
     //페이지 번호 출력
@@ -72,7 +72,7 @@
         if( $e == $_page )
             echo ("<strong>$e</strong>");  //$e 와 $_page번호가 서로 같으면....
         else
-            echo ("&nbsp; <a href=$PHP_SELF?_page=$e$href>[$e]</a>&nbsp;");  //$e와 $_page번호가 서로 같지 않으면...
+            echo ("&nbsp; <a href=$php_self?_page=$e$href>[$e]</a>&nbsp;");  //$e와 $_page번호가 서로 같지 않으면...
     }
 
 
@@ -80,6 +80,6 @@
     $next_group = $last;
     if( $next_group > $rr )( $next_group= $rr ); //$next_group는 $rr보다 크면 $rr은 $next_group가 된다.
     if( $_page != $rr)
-        echo ("&nbsp; <a href=$PHP_SELF?_page=$next_group$href>[▶]</a>");
+        echo ("&nbsp; <a href=$php_self?_page=$next_group$href>[▶]</a>");
 ?>
 </div>
