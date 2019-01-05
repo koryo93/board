@@ -3,7 +3,7 @@ header("content-type:text/html; charset=UTF-8");
 
 include("../../lib/db_connect.php");
 $connect = dbconn(); //DB컨넥트
-$member = member(); //회원정보
+$member = member($connect); //회원정보
 
 if( !$member["user_id"] )
     Error("로그인 후 이용해 주세요.");
@@ -41,20 +41,14 @@ if($_FILES["file01"]["name"])
     move_uploaded_file($_FILES['file01']['tmp_name'],$dir.$newfile01); //파일업로드;
     chmod($dir.$newfile01,0777);
 
-    $query="UPDATE bbs1 SET 
-              file01='$newfile01'
-            WHIERE id='$id' AND no='$no' ";
+    $query="UPDATE bbs1 SET file01='$newfile01' WHERE id='$id' AND no='$no' ";
     mysqli_query($connect, $query);
-
 }
 
-$query="UPDATE bbs1 SET
-            subject='$subject',
-            story='$story' 
-		WHERE id='$id' AND no='$no' ";
+$query="UPDATE bbs1 SET subject='$subject', story='$story' WHERE id='$id' AND no='$no' ";
 mysqli_query($connect, $query);
 
-mysql_close($connect);
+mysqli_close($connect);
 ?>
  
 <script>
